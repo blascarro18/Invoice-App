@@ -1,0 +1,97 @@
+@model InvoiceApp.Models.Invoices.Invoice
+
+@{
+    ViewData["Title"] = "Detalle de Factura";
+}
+
+<div class="container-fluid">
+    <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h2>Factura #@Model.Id</h2>
+        <div class="btn-toolbar mb-2 mb-md-0"></div>
+        <a class="btn btn-danger" asp-controller="Invoice" asp-action="Index" role="button">
+            <span data-feather="arrow-left"></span>
+            Regresar
+        </a>
+
+    </div>
+
+    <h4>Datos del Cliente</h4>
+    <p><strong>Documento:</strong> @Model.CliDocument</p>
+    <p><strong>Nombre:</strong> @Model.CliNames @Model.CliLastNames</p>
+    <p><strong>Dirección:</strong> @Model.CliAddress</p>
+    <p><strong>Teléfono:</strong> @Model.CliPhone</p>
+    <p><strong>Fecha:</strong> @Model.InvoiceDate.ToString("dd/MM/yyyy")</p>
+
+    <hr />
+
+    <h4>Artículos</h4>
+    <div class="table-responsive">
+        <table class="table table-bordered table-sm">
+            <thead class="table-light table-center">
+                <tr>
+                    <th>#</th>
+                    <th>ID Artículo</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.InvoiceDetails != null && Model.InvoiceDetails.Count > 0)
+                {
+                    var index = 1;
+                    decimal total = 0;
+
+                    foreach (var detail in Model.InvoiceDetails)
+                    {
+                        var subtotal = detail.Quantity * detail.Price;
+                        total += subtotal;
+                        <tr>
+                            <td>@index</td>
+                            <td>@detail.ArticleId</td>
+                            <td>@detail.Quantity</td>
+                            <td>@detail.Price.ToString("C0")</td>
+                            <td>@subtotal.ToString("C0")</td>
+                        </tr>
+                        index++;
+                    }
+
+                    <tr class="table-secondary">
+                        <td colspan="4" class="text-custom-end px-10"><strong>Valor Bruto:</strong></td>
+                        <td><strong>@total.ToString("C0")</strong></td>
+                    </tr>
+
+                    // Calcular descuento
+                    var discount = total >= 500000 ? total * 0.05m : 0m;
+                    var taxableAmount = total - discount;
+
+                    // Calcular IVA (19%)
+                    var tax = taxableAmount * 0.19m;
+
+                    // Total final
+                    var finalTotal = taxableAmount + tax;
+
+                    <tr class="table-secondary">
+                        <td colspan="4" class="text-custom-end px-10"><strong>Descuento 5%:</strong></td>
+                        <td><strong>@discount.ToString("C0")</strong></td>
+                    </tr>
+                    <tr class="table-secondary">
+                        <td colspan="4" class="text-custom-end px-10"><strong>IVA (19%):</strong></td>
+                        <td><strong>@tax.ToString("C0")</strong></td>
+                    </tr>
+                    <tr class="table-dark">
+                        <td colspan="4" class="text-custom-end px-10"><strong>Total Factura:</strong></td>
+                        <td><strong>@finalTotal.ToString("C0")</strong></td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">No hay artículos asociados a esta factura.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

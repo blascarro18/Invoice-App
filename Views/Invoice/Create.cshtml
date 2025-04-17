@@ -1,0 +1,177 @@
+@{
+    ViewData["Title"] = "Nueva Factura";
+}
+
+<div class="container-fluid">
+    <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h2>Nueva Factura</h2>
+        <div class="btn-toolbar mb-2 mb-md-0"></div>
+        <a class="btn btn-danger" asp-controller="Invoice" asp-action="Index" role="button">
+            <span data-feather="arrow-left"></span>
+            Regresar
+        </a>
+
+    </div>
+
+    <div class="row g-5">
+        <div class="col-md-5 col-lg-4 order-md-last">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-dark">Total Factura:</span>
+            </h4>
+            <ul class="list-group mb-3">
+                <li class="list-group-item d-flex justify-content-between lh-sm">
+                    <div>
+                        <h6 class="my-0">Valor Bruto:</h6>
+                    </div>
+                    <span class="text-muted" id="grossAmount">$0</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between lh-sm">
+                    <div>
+                        <h6 class="my-0">Descuento 5%</h6>
+                        <small class="text-muted">Montos de $500.000 en adelante.</small>
+                    </div>
+                    <span class="text-muted" id="discount">$0</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between lh-sm">
+                    <div>
+                        <h6 class="my-0">IVA</h6>
+                        <small class="text-muted">19%</small>
+                    </div>
+                    <span class="text-muted" id="tax">$0</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <strong><span>Total a pagar</span></strong>
+                    <strong id="invoiceTotal">$0</strong>
+                </li>
+            </ul>
+            <button class="w-100 btn btn-primary" type="submit" form="invoiceForm">
+                <span data-feather="save"></span>
+                Guardar Factura
+            </button>
+        </div>
+        <div class="col-md-7 col-lg-8">
+            <form id="invoiceForm" class="needs-validation" novalidate>
+                <div class="row g-3 mb-4">
+                    <div class="col-sm-6">
+                        <label for="invoiceDate" class="form-label"><b>Fecha Factura:</b></label>
+                        <input type="date" class="form-control" id="invoiceDate" readonly />
+                    </div>
+                </div>
+                <div class="row g-3 mb-4">
+                    <div class="col-sm-12">
+                        <label for="document" class="form-label"><b># Documento del cliente:</b></label>
+                        <input type="text" class="form-control" id="document" required maxlength="15" />
+                        <div class="invalid-feedback">
+                            El número de documento es requerido y no debe exceder los 15 caracteres.
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="names" class="form-label"><b>Nombres:</b></label>
+                        <input type="text" class="form-control" id="names" required maxlength="30" />
+                        <div class="invalid-feedback">
+                            Los nombres son requeridos.
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="lastNames" class="form-label"><b>Apellidos:</b></label>
+                        <input type="text" class="form-control" id="lastNames" required maxlength="30" />
+                        <div class="invalid-feedback">
+                            Los apellidos son requeridos.
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="address" class="form-label"><b>Dirección:</b></label>
+                        <input type="text" class="form-control" id="address" required maxlength="30" />
+                        <div class="invalid-feedback">
+                            La dirección es requerida.
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="phone" class="form-label"><b>Teléfono:</b></label>
+                        <input type="text" class="form-control" id="phone" required maxlength="10" />
+                        <div class="invalid-feedback">
+                            El teléfono es requerido.
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="row g-3 mb-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center border-bottom">
+                    <h5>Artículos</h5>
+                </div>
+
+                <div class="col-sm-4">
+                    <label for="articleId" class="form-label"><b>Código Artículo:</b></label>
+                    <input type="text" class="form-control" id="articleId" required />
+                    <div class="invalid-feedback">
+                        El código del artículo es requerido.
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <label for="articleQty" class="form-label"><b>Cantidad:</b></label>
+                    <input type="text" class="form-control" id="articleQty" required />
+                    <div class="invalid-feedback">
+                        La cantidad del artículo es requerido.
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <label for="articlePrice" class="form-label"><b>Precio Unitario:</b></label>
+                    <input type="text" class="form-control" id="articlePrice" required />
+                    <div class="invalid-feedback">
+                        El precio del artículo es requerido.
+                    </div>
+                </div>
+
+                <div class="col-sm-1">
+                    <label for="" class="form-label"></label>
+                    <button id="btnAddArticle" class="btn btn-primary btn-mt-custom" type="button">
+                        <span data-feather="plus-circle"></span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center border-bottom">
+                    <h6>Artículos agregados:</h6>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
+                        <thead class="table-center">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Códido Articulos</th>
+                                <th scope="col">Cantidad</th>
+                                <th scope="col">Precio Unitario</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="articlesTable">
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">
+                                    No hay artículos agregados.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let articles = []; // Array to store articles
+    </script>
+    <script src="~/js/Invoice/invoice-actions.js"></script>
+    <script src="~/js/Invoice/invoice-calculations.js"></script>
+    <script src="~/js/Invoice/invoice-validations.js"></script>
+}

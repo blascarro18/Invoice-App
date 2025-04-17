@@ -1,0 +1,55 @@
+@model List<InvoiceApp.Models.Accounts.Account>
+
+@{
+    ViewData["Title"] = "Cuentas Novasoft";
+}
+
+<div class="container">
+    <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h2>Cuentas (API Novasoft)</h2>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="table-light table-center">
+                <tr>
+                    <th>Código</th>
+                    <th>NIT</th>
+                    <th>Nombre</th>
+                    <th>Ciudad</th>
+                    <th>Teléfono</th>
+                    <th>Email</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var account in Model)
+                    {
+                        <tr>
+                            <td>@account.CodCli</td>
+                            <td>@account.NitCli</td>
+                            <td>@account.NomCli</td>
+                            <td>@account.CodCiu</td>
+                            <td>@account.Te1Cli</td>
+                            <td>@account.Email</td>
+                            <td>
+                                <a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@account.CodCli">
+                                    Ver
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="text-center">No se encontraron cuentas.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
